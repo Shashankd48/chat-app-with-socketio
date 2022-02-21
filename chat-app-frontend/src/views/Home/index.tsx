@@ -1,12 +1,6 @@
 import axios from "axios";
 import { useEffect } from "react";
 import config from "../../config";
-import io from "socket.io-client";
-import { nanoid } from "nanoid";
-
-// no dotenv
-const socket = io(config.server);
-const userName = nanoid(4);
 
 const Home = () => {
    useEffect(() => {
