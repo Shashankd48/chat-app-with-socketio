@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import config from "../../config";
+import Chat from "../../components/Chat";
 
 const Home = () => {
    useEffect(() => {
@@ -13,12 +14,8 @@ const Home = () => {
       checkbackend();
    }, []);
    return (
-      <div className=" bg-red-300 p-10">
-         <h1 className="text-lg">Home Page</h1>
-         <p className=" text-lg font-sans font-semibold">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga omnis
-            autem magnam magni facilis mollitia perspiciatis eum quod rem eos.
-         </p>
+      <div className="h-screen bg-gray-200">
+         <Chat />
       </div>
    );
 };
