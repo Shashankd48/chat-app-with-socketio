@@ -6,13 +6,18 @@ const config = require("./config");
 const server = http.createServer(app);
 const cors = require("cors");
 
-app.use(cors({ origin: "*" }));
+// Database connection
+require("./config/dbConfig");
 
+app.use(cors({ origin: "*" }));
 const io = require("socket.io")(server, {
    cors: {
       origin: "*",
    },
 });
+// Express Middlewares
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 io.on("connection", (socket) => {
    console.log("User connected", socket.id);
@@ -26,26 +31,13 @@ io.on("connection", (socket) => {
    });
 });
 
-app.get("/api", (req, res) => {
-   return res
-      .status(200)
-      .json({ error: false, message: "Server is up and running!" });
-});
+// Routes import
+const HomeRoutes = require("./routes");
+const UserRoutes = require("./routes/user");
 
-app.get("/", (req, res) => {
-   return res
-      .status(200)
-      .json({ error: false, message: "Server is up and running!" });
-});
-
-app.get("/template", (req, res) => {
-   try {
-      return res.sendFile(__dirname + "/templates/index.html");
-   } catch (error) {
-      console.log(error);
-      throw error;
-   }
-});
+// Use routes
+app.use("/api/", HomeRoutes);
+app.use("/api/user", UserRoutes);
 
 server.listen(config.port, () => {
    console.log("listening on *:", config.port);

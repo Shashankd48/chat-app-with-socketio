@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const MessageSections = () => {
    const [message, setMessage] = useState("");
-   const [messages, setMessages] = useState(Array(100).fill("Hello"));
+   const [messages, setMessages] = useState(Array(50).fill("Hello"));
 
    useEffect(() => {}, []);
 
@@ -32,7 +32,7 @@ const MessageSections = () => {
             </div>
          </div>
          <div className="flex flex-col h-[92%]">
-            <div className=" flex-grow flex-1 p-2">
+            <div className=" flex-grow flex-1 p-2 overflow-y-auto">
                {messages.map((message) => (
                   <p>{message}</p>
                ))}
