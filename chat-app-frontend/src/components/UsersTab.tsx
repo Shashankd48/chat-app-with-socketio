@@ -14,7 +14,7 @@ const UsersTab = () => {
          });
       };
 
-      _getUsers();
+      // _getUsers();
    }, []);
 
    return (
@@ -45,6 +45,12 @@ const UsersTab = () => {
                   </li>
                ))}
             </ul>
+
+            {usersList.length === 0 && (
+               <div className="flex justify-center items-center h-[400px]">
+                  <h2 className="font-medium text-lg">No Users found!</h2>
+               </div>
+            )}
          </div>
       </div>
    );
