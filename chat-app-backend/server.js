@@ -39,6 +39,12 @@ const UserRoutes = require("./routes/user");
 app.use("/api/", HomeRoutes);
 app.use("/api/user", UserRoutes);
 
+app.get("/", (req, res) => {
+   return res
+      .status(200)
+      .json({ error: false, message: "Server is up and running!" });
+});
+
 server.listen(config.port, () => {
    console.log("listening on *:", config.port);
 });

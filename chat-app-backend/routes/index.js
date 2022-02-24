@@ -6,12 +6,6 @@ router.get("/api", (req, res) => {
       .json({ error: false, message: "Server is up and running!" });
 });
 
-router.get("/", (req, res) => {
-   return res
-      .status(200)
-      .json({ error: false, message: "Server is up and running!" });
-});
-
 router.get("/template", (req, res) => {
    try {
       return res.sendFile(__dirname + "/templates/index.html");
