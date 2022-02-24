@@ -33,8 +33,8 @@ const MessageSections = () => {
          </div>
          <div className="flex flex-col h-[92%]">
             <div className=" flex-grow flex-1 p-2 overflow-y-auto">
-               {messages.map((message) => (
-                  <p>{message}</p>
+               {messages.map((message, index) => (
+                  <p key={index}>{message}</p>
                ))}
             </div>
             <div className="h-[50px] sticky bottom-0 bg-white">
