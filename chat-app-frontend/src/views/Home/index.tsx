@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
-import config from "../../config";
-import Chat from "../../components/Chat";
+import config from "src/config";
+import Chat from "src/components/Chat";
 
 const Home = () => {
    useEffect(() => {
