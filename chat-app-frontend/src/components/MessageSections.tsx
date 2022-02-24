@@ -11,7 +11,7 @@ const MessageSections = () => {
    };
 
    return (
-      <div className="col-span-2 h-full overflow-y-auto ">
+      <div className="col-span-3 h-full overflow-y-auto">
          <div className=" sticky top-0 bg-blue-600 px-3 py-2 items-center flex">
             <div className="flex items-center">
                <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center">
