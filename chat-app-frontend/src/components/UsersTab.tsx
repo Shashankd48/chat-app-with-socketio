@@ -1,31 +1,22 @@
-const users = [
-   {
-      id: "jasd8nak",
-      username: "shashankd48",
-   },
-   {
-      id: "jasd8pak",
-      username: "void148",
-   },
-   {
-      id: "jasd9nak",
-      username: "pathakd48",
-   },
-   {
-      id: "jasm8nak",
-      username: "mark01",
-   },
-   {
-      id: "jask8nak",
-      username: "dj007",
-   },
-   {
-      id: "jasd007k",
-      username: "vikas4real",
-   },
-];
+import { useState, useEffect } from "react";
+import { getUsers } from "src/actions/usersActions";
+import { User } from "src/interfaces/user.interface";
 
 const UsersTab = () => {
+   const [usersList, setUsersList] = useState<[User] | []>([]);
+
+   useEffect(() => {
+      const _getUsers = async () => {
+         getUsers().then((data) => {
+            if (data && data?.error) return;
+
+            setUsersList(data.users);
+         });
+      };
+
+      _getUsers();
+   }, []);
+
    return (
       <div className="border-r border-gray-300 h-full overflow-y-auto px-3 pt-5 min-w-[200px] bg-white">
          <div className="sticky top-0 bg-white pb-3">
@@ -33,7 +24,7 @@ const UsersTab = () => {
          </div>
          <div className=" ">
             <ul className="mt-5">
-               {users.map((user) => (
+               {usersList.map((user) => (
                   <li
                      key={user.id}
                      className="text-lg py-2 flex items-center hover:bg-slate-300 px-3 rounded-md cursor-pointer"
@@ -43,7 +34,14 @@ const UsersTab = () => {
                            {user.username[0].toUpperCase()}
                         </h2>
                      </div>
-                     <p className="ml-5">{user.username}</p>
+                     <div>
+                        <h3 className="ml-5 text-md font-medium">
+                           {user.name}
+                        </h3>
+                        <h3 className="ml-5 text-sm font-mono text-gray-500">
+                           {user.username}
+                        </h3>
+                     </div>
                   </li>
                ))}
             </ul>
