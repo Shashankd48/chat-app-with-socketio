@@ -17,8 +17,18 @@ const UsersTab = () => {
       _getUsers();
    }, []);
 
+   const UserInfo = () => {
+      return (
+         <div>
+            <div>{}</div>
+         </div>
+      );
+   };
+
    return (
       <div className="border-r border-gray-300 h-full overflow-y-auto px-3 pt-5 min-w-[200px] bg-white">
+         <UserInfo />
+
          <div className="sticky top-0 bg-white pb-3">
             <h1 className="font-medium text-lg">Users & Group</h1>
          </div>
@@ -38,7 +48,7 @@ const UsersTab = () => {
                      </div>
                      <div className="pl-3">
                         <h3 className="text-md font-medium truncate max-w-[200px]">
-                           {user.name} hello htere
+                           {user.name}
                         </h3>
                         <h3 className="text-sm font-mono text-gray-500">
                            {user.username}

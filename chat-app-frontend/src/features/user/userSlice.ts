@@ -8,8 +8,17 @@ const user = createSlice({
       setUser(state, { payload }: PayloadAction<User | null>) {
          return (state = payload != null ? payload : null);
       },
+
+      userLogin(state, { payload }: PayloadAction<User | null>) {
+         if (payload)
+            localStorage.setItem("@chat-app-user", JSON.stringify(payload));
+         return (state = payload != null ? payload : null);
+      },
+      userLogout() {
+         return null;
+      },
    },
 });
 
-export const { setUser } = user.actions;
+export const { setUser, userLogin, userLogout } = user.actions;
 export default user.reducer;

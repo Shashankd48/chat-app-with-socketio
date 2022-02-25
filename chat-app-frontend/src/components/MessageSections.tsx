@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const MessageSections = () => {
    const [message, setMessage] = useState("");
-   const [messages, setMessages] = useState(Array(50).fill("Hello"));
+   const [messages, setMessages] = useState(Array(10).fill("Hello"));
 
    useEffect(() => {}, []);
 
