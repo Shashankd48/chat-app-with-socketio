@@ -34,10 +34,12 @@ io.on("connection", (socket) => {
 // Routes import
 const HomeRoutes = require("./routes");
 const UserRoutes = require("./routes/user");
+const AuthRoutes = require("./routes/auth");
 
 // Use routes
 app.use("/api/", HomeRoutes);
 app.use("/api/user", UserRoutes);
+app.use("/api/auth", AuthRoutes);
 
 app.get("/", (req, res) => {
    return res

@@ -1,6 +1,6 @@
 import "./App.css";
 import Home from "./views/Home";
-import Auth from "./views/Auth";
+import Accounts from "./views/Accounts";
 import io from "socket.io-client";
 import { nanoid } from "nanoid";
 import config from "./config";
@@ -19,7 +19,7 @@ function App() {
             <BrowserRouter>
                <Routes>
                   <Route path="/" element={<Home />} />
-                  <Route path="/login" element={<Auth />} />
+                  <Route path="accounts/login" element={<Accounts />} />
                </Routes>
             </BrowserRouter>
          </Provider>

@@ -20,6 +20,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
+    "paths": {
+      "*": ["*"],
+      "test/*": ["test/*"],
+      "underscore": ["lodash"]
+    }
   },
   "include": [
     "src"

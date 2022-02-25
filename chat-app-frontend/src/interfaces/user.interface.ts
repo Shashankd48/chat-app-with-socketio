@@ -3,3 +3,9 @@ export interface User {
    username: string;
    name: string;
 }
+
+export const InitialUser = {
+   id: "",
+   username: "",
+   name: "",
+};
