@@ -1,40 +1,58 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { getUsers } from "src/actions/usersActions";
 import { User } from "src/interfaces/user.interface";
+import { RootState } from "src/reducers";
 
 const UsersTab = () => {
    const [usersList, setUsersList] = useState<[User] | []>([]);
+   const user = useSelector((state: RootState) => state.user);
 
    useEffect(() => {
       const _getUsers = async () => {
          getUsers().then((data) => {
             if (!data || data?.error) return;
 
-            setUsersList(data.users);
+            const tempUsers = data.users.filter(
+               (item: any) => item._id != user?.id
+            );
+            setUsersList(tempUsers);
          });
       };
 
-      _getUsers();
-   }, []);
+      if (user) _getUsers();
+   }, [user]);
 
    const UserInfo = () => {
       return (
-         <div>
-            <div>{}</div>
+         <div className=" sticky top-0 bg-white py-5">
+            <div className="border-b border-gray-300">
+               <div className="bg-gray-300 rounded-full h-20 w-20 flex justify-center items-center border border-gray-300 m-auto">
+                  <h2 className="font-medium text-4xl">
+                     {user?.username[0].toUpperCase()}
+                  </h2>
+               </div>
+
+               <div className=" text-center py-2">
+                  <h2 className="font-medium text-lg">{user?.name}</h2>
+                  <p className="text-sm font-mono tracking-wide">
+                     {user?.username}
+                  </p>
+               </div>
+            </div>
+            <div className="pt-3">
+               <h1 className="font-medium text-lg">Users & Group</h1>
+            </div>
          </div>
       );
    };
 
    return (
-      <div className="border-r border-gray-300 h-full overflow-y-auto px-3 pt-5 min-w-[200px] bg-white">
+      <div className="border-r border-gray-300 h-full overflow-y-auto px-3  min-w-[200px] bg-white">
          <UserInfo />
 
-         <div className="sticky top-0 bg-white pb-3">
-            <h1 className="font-medium text-lg">Users & Group</h1>
-         </div>
-
          {usersList.length > 0 ? (
-            <ul className="mt-5">
+            <ul className="py-2 pb-4">
                {usersList.map((user) => (
                   <li
                      key={user.id}
