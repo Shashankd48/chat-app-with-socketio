@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getUsers } from "src/actions/usersActions";
+import { setCurrentChat } from "src/features/user/currentChatSlice";
 import { User } from "src/interfaces/user.interface";
 import { RootState } from "src/reducers";
+import { useAppDispatch } from "src/store";
 
 const UsersTab = () => {
    const [usersList, setUsersList] = useState<[User] | []>([]);
    const user = useSelector((state: RootState) => state.user);
+   const currentChat = useSelector((state: RootState) => state.currentChat);
+   const dispatch = useAppDispatch();
 
    useEffect(() => {
       const _getUsers = async () => {
@@ -22,6 +26,10 @@ const UsersTab = () => {
 
       if (user) _getUsers();
    }, [user]);
+
+   useEffect(() => {
+      console.log("log: currentChat", currentChat);
+   }, [currentChat]);
 
    const UserInfo = () => {
       return (
@@ -58,6 +66,10 @@ const UsersTab = () => {
                      key={user.id}
                      className="text-lg py-2 flex items-center hover:bg-slate-300 px-1
                       rounded-md cursor-pointer"
+                     onClick={() => {
+                        console.log("log: c", user);
+                        dispatch(setCurrentChat(user));
+                     }}
                   >
                      <div className="bg-gray-300 rounded-full h-11 w-11 flex justify-center items-center border border-gray-300">
                         <h2 className=" font-medium">
