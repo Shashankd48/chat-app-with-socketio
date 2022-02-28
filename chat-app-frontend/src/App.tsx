@@ -5,13 +5,13 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import Layouts from "./Layouts";
-import SocketContext, { socket } from "./context/SocketContext";
+import SocketProvider from "./context/SocketProvider";
 
 function App() {
    return (
       <div className="App">
-         <SocketContext.Provider value={socket}>
-            <Provider store={store}>
+         <Provider store={store}>
+            <SocketProvider>
                <Layouts>
                   <BrowserRouter>
                      <Routes>
@@ -20,8 +20,8 @@ function App() {
                      </Routes>
                   </BrowserRouter>
                </Layouts>
-            </Provider>
-         </SocketContext.Provider>
+            </SocketProvider>
+         </Provider>
       </div>
    );
 }

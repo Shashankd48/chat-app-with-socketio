@@ -1,8 +1,7 @@
-import { useEffect, useState, Fragment, useContext } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useSelector } from "react-redux";
 import { addMessage, getThreads } from "src/actions/chatActions";
-import SocketContext from "src/context/SocketContext";
-import { sendMessage } from "src/features/chat/chatSlice";
+import { useSocket } from "src/context/SocketProvider";
 import { RootState } from "src/reducers";
 import { useAppDispatch } from "src/store";
 
@@ -19,12 +18,12 @@ const MessageSections = () => {
    };
    const [message, setMessage] = useState<Message>(initialMessage);
    const [messages, setMessages] = useState<Message[] | []>([]);
-   const socket = useContext(SocketContext);
+   const socket = useSocket();
 
    const dispatch = useAppDispatch();
 
    useEffect(() => {
-      if (socket) getThreads(socket);
+      if (socket) getThreads(socket, setMessages, messages);
    }, [socket]);
 
    const handleSubmit = (e: any) => {

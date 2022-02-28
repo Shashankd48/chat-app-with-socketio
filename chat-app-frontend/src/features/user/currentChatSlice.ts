@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../interfaces/user.interface";
 
 const currentChat = createSlice({
-   name: "user",
+   name: "currentChat",
    initialState: null as User | null,
    reducers: {
       setCurrentChat(state, { payload }: PayloadAction<User | null>) {

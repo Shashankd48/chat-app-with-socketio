@@ -20,10 +20,6 @@ const Accounts = () => {
 
    const toggleForm = () => setIsLogin(!isLogin);
 
-   useEffect(() => {
-      console.log(user);
-   }, [user]);
-
    const handleSubmit = async (e: any) => {
       e.preventDefault();
       try {

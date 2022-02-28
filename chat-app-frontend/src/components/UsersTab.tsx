@@ -9,7 +9,6 @@ import { useAppDispatch } from "src/store";
 const UsersTab = () => {
    const [usersList, setUsersList] = useState<[User] | []>([]);
    const user = useSelector((state: RootState) => state.user);
-   const currentChat = useSelector((state: RootState) => state.currentChat);
    const dispatch = useAppDispatch();
 
    useEffect(() => {
@@ -27,17 +26,13 @@ const UsersTab = () => {
                         username: item.username,
                      };
                });
-            console.log("log: tempUsers", tempUsers);
+
             setUsersList(tempUsers);
          });
       };
 
       if (user) _getUsers();
    }, [user]);
-
-   useEffect(() => {
-      console.log("log: currentChat", currentChat);
-   }, [currentChat]);
 
    const UserInfo = () => {
       return (
@@ -75,7 +70,6 @@ const UsersTab = () => {
                      className="text-lg py-2 flex items-center hover:bg-slate-300 px-1
                       rounded-md cursor-pointer"
                      onClick={() => {
-                        console.log("log: c", user);
                         dispatch(setCurrentChat(user));
                      }}
                   >
