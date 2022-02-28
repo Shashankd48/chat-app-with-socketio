@@ -17,9 +17,17 @@ const UsersTab = () => {
          getUsers().then((data) => {
             if (!data || data?.error) return;
 
-            const tempUsers = data.users.filter(
-               (item: any) => item._id != user?.id
-            );
+            const tempUsers = data.users
+               .filter((item: any) => item._id != user?.id)
+               .map((item: any) => {
+                  if (item._id != user?.id)
+                     return {
+                        id: item._id,
+                        name: item.name,
+                        username: item.username,
+                     };
+               });
+            console.log("log: tempUsers", tempUsers);
             setUsersList(tempUsers);
          });
       };

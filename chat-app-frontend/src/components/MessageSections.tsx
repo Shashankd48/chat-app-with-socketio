@@ -1,18 +1,45 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment, useContext } from "react";
 import { useSelector } from "react-redux";
+import { addMessage, getThreads } from "src/actions/chatActions";
+import SocketContext from "src/context/SocketContext";
+import { sendMessage } from "src/features/chat/chatSlice";
 import { RootState } from "src/reducers";
+import { useAppDispatch } from "src/store";
+
+type Message = {
+   value: string;
+   senderId: string;
+};
 
 const MessageSections = () => {
-   const [message, setMessage] = useState("");
-   const [messages, setMessages] = useState(Array(10).fill("Hello"));
-   const currentChat = useSelector((state: RootState) => state.currentChat);
+   const { currentChat, user } = useSelector((state: RootState) => state);
+   const initialMessage = {
+      value: "",
+      senderId: user?.id || "",
+   };
+   const [message, setMessage] = useState<Message>(initialMessage);
+   const [messages, setMessages] = useState<Message[] | []>([]);
+   const socket = useContext(SocketContext);
+
+   const dispatch = useAppDispatch();
 
    useEffect(() => {
-      console.log("log: ", currentChat);
-   }, []);
+      if (socket) getThreads(socket);
+   }, [socket]);
 
    const handleSubmit = (e: any) => {
       e.preventDefault();
+      if (user && currentChat) {
+         const payload = {
+            currentChat,
+            message,
+         };
+
+         addMessage(socket, payload);
+         const temp = [...messages, message];
+         setMessages(temp);
+         setMessage(initialMessage);
+      }
    };
 
    const ChatHeader = () => {
@@ -51,7 +78,7 @@ const MessageSections = () => {
                {currentChat ? (
                   <Fragment>
                      {messages.map((message, index) => (
-                        <p key={index}>{message}</p>
+                        <p key={index}>{message.value}</p>
                      ))}
                   </Fragment>
                ) : (
@@ -72,8 +99,10 @@ const MessageSections = () => {
                <form action="" className="flex" onSubmit={handleSubmit}>
                   <input
                      className="border border-gray-400 py-2 px-3 w-full rounded-full"
-                     value={message}
-                     onChange={(e) => setMessage(e.target.value)}
+                     value={message.value}
+                     onChange={(e) =>
+                        setMessage({ ...message, value: e.target.value })
+                     }
                   />
                   <button
                      type="submit"

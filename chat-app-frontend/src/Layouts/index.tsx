@@ -16,6 +16,7 @@ const Layouts = ({ children }: { children: React.ReactNode }) => {
 
       readLocalUser();
    }, []);
+
    return <>{children}</>;
 };
 
