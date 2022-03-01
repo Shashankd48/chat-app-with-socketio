@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
-import { InitialUser, User } from "src/interfaces/user.interface";
+import { useState } from "react";
+import { InitialUser, UserInterface } from "src/interfaces/user.interface";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { login } from "src/actions/accountActions";
 import { useAppDispatch } from "src/store";
-import { setUser, userLogin } from "src/features/user/userSlice";
+import { userLogin } from "src/features/user/userSlice";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "src/reducers";
 
 const Accounts = () => {
-   const [account, setAccount] = useState<User>(InitialUser);
+   const [account, setAccount] = useState<UserInterface>(InitialUser);
    const [isLogin, setIsLogin] = useState(true);
    const dispatch = useAppDispatch();
    const user = useSelector((state: RootState) => state.user);

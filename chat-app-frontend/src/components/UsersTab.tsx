@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getUsers } from "src/actions/usersActions";
 import { setCurrentChat } from "src/features/user/currentChatSlice";
-import { User } from "src/interfaces/user.interface";
+import { UserInterface } from "src/interfaces/user.interface";
 import { RootState } from "src/reducers";
 import { useAppDispatch } from "src/store";
 
 const UsersTab = () => {
-   const [usersList, setUsersList] = useState<[User] | []>([]);
+   const [usersList, setUsersList] = useState<[UserInterface] | []>([]);
    const user = useSelector((state: RootState) => state.user);
    const dispatch = useAppDispatch();
 

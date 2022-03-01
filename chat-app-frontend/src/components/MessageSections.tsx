@@ -4,11 +4,13 @@ import { addMessage, getThreads } from "src/actions/chatActions";
 import { useSocket } from "src/context/SocketProvider";
 import { RootState } from "src/reducers";
 import { useAppDispatch } from "src/store";
+import { MessageInterface } from "src/interfaces/message.interface";
+import SocketEvents from "src/config/SocketEvents";
 
-type Message = {
-   value: string;
-   senderId: string;
-};
+const sampleMessage: MessageInterface[] = [
+   { value: "Hello Sample", senderId: "jnjnda" },
+   { value: "Hello Sample2", senderId: "knjnda" },
+];
 
 const MessageSections = () => {
    const { currentChat, user } = useSelector((state: RootState) => state);
@@ -16,15 +18,38 @@ const MessageSections = () => {
       value: "",
       senderId: user?.id || "",
    };
-   const [message, setMessage] = useState<Message>(initialMessage);
-   const [messages, setMessages] = useState<Message[] | []>([]);
+   const [message, setMessage] = useState<MessageInterface>(initialMessage);
+   const [messages, setMessages] = useState<MessageInterface[] | []>(
+      sampleMessage
+   );
    const socket = useSocket();
 
    const dispatch = useAppDispatch();
 
    useEffect(() => {
-      if (socket) getThreads(socket, setMessages, messages);
-   }, [socket]);
+      console.log("log: messages", messages);
+   }, [messages]);
+
+   const newAddMessage = async (newMessage: MessageInterface) => {
+      const tempMessages = [...messages];
+      console.log("log: List", messages);
+      tempMessages.push(newMessage);
+      console.log("log: tempMessages", tempMessages);
+      await setMessages(tempMessages);
+   };
+
+   useEffect(() => {
+      if (socket?.connected) {
+         console.log("log: Now connected");
+         socket.on(SocketEvents.receiveMessage, (data) => {
+            console.log("log: New Message", data);
+            newAddMessage(data.message);
+         });
+      } else {
+         console.log("log: Not connected yet!");
+      }
+      // if (socket?.connected) getThreads(socket, setMessages, messages);
+   }, [socket?.connected]);
 
    const handleSubmit = (e: any) => {
       e.preventDefault();

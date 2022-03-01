@@ -15,19 +15,21 @@ type LayoutsProps = {
    children: ReactNode;
 };
 
-const SocketContext = createContext(null);
+const SocketContext = createContext<Socket | undefined>(undefined);
 
 export function useSocket() {
    return useContext(SocketContext);
 }
 
 export default function SocketProvider({ children }: LayoutsProps) {
-   const [socket, setSocket] = useState<any>();
+   const [socket, setSocket] = useState<Socket>();
    const user = useSelector((state: RootState) => state.user);
 
    useEffect((): ReturnType<EffectCallback> => {
       if (user) {
-         const newSocket = io(config.server);
+         const newSocket = io(config.server, {
+            transports: ["websocket", "polling"],
+         });
          setSocket(newSocket);
          return (): any => newSocket.close();
       }

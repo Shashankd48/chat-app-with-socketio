@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../../interfaces/user.interface";
+import { UserInterface } from "../../interfaces/user.interface";
 
 const currentChat = createSlice({
    name: "currentChat",
-   initialState: null as User | null,
+   initialState: null as UserInterface | null,
    reducers: {
-      setCurrentChat(state, { payload }: PayloadAction<User | null>) {
+      setCurrentChat(state, { payload }: PayloadAction<UserInterface | null>) {
          return (state = payload != null ? payload : null);
       },
       removeCurrentChat(state) {

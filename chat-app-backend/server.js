@@ -5,31 +5,24 @@ const http = require("http");
 const config = require("./config");
 const server = http.createServer(app);
 const cors = require("cors");
+const socket = require("./socket");
 
 // Database connection
 require("./config/dbConfig");
 
+// CORS Middlewares
 app.use(cors({ origin: "*" }));
 const io = require("socket.io")(server, {
    cors: {
       origin: "*",
    },
 });
+
 // Express Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-io.on("connection", (socket) => {
-   console.log("User connected", socket.id);
-   socket.on("disconnect", () => {
-      console.log("User disconnected", socket.id);
-   });
-
-   socket.on("message", (data) => {
-      console.log("Data: ", data);
-      socket.broadcast.emit("message", data.message);
-   });
-});
+socket(io);
 
 // Routes import
 const HomeRoutes = require("./routes");
