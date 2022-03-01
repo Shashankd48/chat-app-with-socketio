@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { sendMessage, getThreads } from "src/actions/chatActions";
 import { useSocket } from "src/context/SocketProvider";
@@ -25,15 +25,21 @@ const MessageSections = () => {
    const [message, setMessage] = useState<MessageInterface>(initialMessage);
    const socket = useSocket();
    const dispatch = useAppDispatch();
-   const setRef = useCallback((node) => {
-      if (node) {
-         node.scrollIntoView({ smooth: true });
-      }
-   }, []);
+   const endOfMessageRef = useRef<any>(null);
 
    useEffect(() => {
       return listenMessage();
    }, [socket?.connected]);
+
+   function scrollMessagesToBottom() {
+      if (endOfMessageRef.current) {
+         console.log("log: mess", endOfMessageRef);
+         endOfMessageRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+         });
+      }
+   }
 
    const listenMessage = () => {
       if (socket?.connected) {
@@ -41,18 +47,22 @@ const MessageSections = () => {
          socket.on(SocketEvents.receiveMessage, (data) => {
             console.log("log: New Message", data);
             dispatch(addMessage(data));
+            scrollMessagesToBottom();
          });
       } else {
          console.log("log: Not connected yet!");
       }
    };
 
-   const handleSubmit = (e: any) => {
+   const handleSubmit = async (e: any) => {
       e.preventDefault();
+      if (message.value === "") return;
+
       if (user && chat.thread) {
+         await dispatch(addMessage(message));
          sendMessage(socket, message);
-         dispatch(addMessage(message));
          setMessage(initialMessage);
+         scrollMessagesToBottom();
       }
    };
 
@@ -86,7 +96,7 @@ const MessageSections = () => {
 
    const Messages = () => {
       return (
-         <div ref={setRef}>
+         <div>
             {chat.messages.map((message, index) => (
                <div
                   className={`w-full h-full flex ${
@@ -105,8 +115,13 @@ const MessageSections = () => {
                   </div>
                </div>
             ))}
+            <EndOfMessage />
          </div>
       );
+   };
+
+   const EndOfMessage = () => {
+      return <div ref={endOfMessageRef} className="mb-5"></div>;
    };
 
    const EmptyThread = () => {
@@ -126,12 +141,13 @@ const MessageSections = () => {
    };
 
    return (
-      <div className="col-span-3 h-full overflow-y-auto">
+      <div className="col-span-3 h-full" ref={endOfMessageRef}>
          <ChatHeader />
          <div className="flex flex-col h-[92vh]">
             <div className="flex-grow flex-1 p-2 overflow-y-auto">
                {chat.thread ? <Messages /> : <EmptyThread />}
             </div>
+
             <div className="h-[50px] sticky bottom-0 bg-white">
                <form action="" className="flex" onSubmit={handleSubmit}>
                   <input
