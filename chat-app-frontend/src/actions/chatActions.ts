@@ -21,6 +21,6 @@ export function getThreads(
    }
 }
 
-export function addMessage(socket: Socket | undefined, message: any) {
+export function sendMessage(socket: Socket | undefined, message: any) {
    if (socket) socket.emit(SocketEvents.sendMessage, { message });
 }

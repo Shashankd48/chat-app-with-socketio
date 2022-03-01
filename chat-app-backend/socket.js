@@ -6,8 +6,6 @@ function socketEvents(io) {
    io.on("connection", (socket) => {
       console.log("User connected", socket.id);
       recipient.push(socket.id);
-      //   const {id} = socket.
-      //   socket.join(id);
 
       socket.on("disconnect", () => {
          console.log("User disconnected", socket.id);

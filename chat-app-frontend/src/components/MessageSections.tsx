@@ -1,67 +1,57 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { addMessage, getThreads } from "src/actions/chatActions";
+import { sendMessage, getThreads } from "src/actions/chatActions";
 import { useSocket } from "src/context/SocketProvider";
 import { RootState } from "src/reducers";
 import { useAppDispatch } from "src/store";
 import { MessageInterface } from "src/interfaces/message.interface";
 import SocketEvents from "src/config/SocketEvents";
+import { addMessage } from "src/features/chat/chatSlice";
 
-const sampleMessage: MessageInterface[] = [
-   { value: "Hello Sample", senderId: "jnjnda" },
-   { value: "Hello Sample2", senderId: "knjnda" },
-];
+const classes = {
+   message: {
+      self: "bg-blue-600 text-white",
+      other: "bg-gray-200 float-right",
+      default: "px-3 py-2 rounded-md my-2 max-w-[75%] inline-block",
+   },
+};
 
 const MessageSections = () => {
-   const { currentChat, user } = useSelector((state: RootState) => state);
+   const { user, chat } = useSelector((state: RootState) => state);
    const initialMessage = {
       value: "",
       senderId: user?.id || "",
    };
    const [message, setMessage] = useState<MessageInterface>(initialMessage);
-   const [messages, setMessages] = useState<MessageInterface[] | []>(
-      sampleMessage
-   );
    const socket = useSocket();
-
    const dispatch = useAppDispatch();
+   const setRef = useCallback((node) => {
+      if (node) {
+         node.scrollIntoView({ smooth: true });
+      }
+   }, []);
 
    useEffect(() => {
-      console.log("log: messages", messages);
-   }, [messages]);
+      return listenMessage();
+   }, [socket?.connected]);
 
-   const newAddMessage = async (newMessage: MessageInterface) => {
-      const tempMessages = [...messages];
-      console.log("log: List", messages);
-      tempMessages.push(newMessage);
-      console.log("log: tempMessages", tempMessages);
-      await setMessages(tempMessages);
-   };
-
-   useEffect(() => {
+   const listenMessage = () => {
       if (socket?.connected) {
          console.log("log: Now connected");
          socket.on(SocketEvents.receiveMessage, (data) => {
             console.log("log: New Message", data);
-            newAddMessage(data.message);
+            dispatch(addMessage(data));
          });
       } else {
          console.log("log: Not connected yet!");
       }
-      // if (socket?.connected) getThreads(socket, setMessages, messages);
-   }, [socket?.connected]);
+   };
 
    const handleSubmit = (e: any) => {
       e.preventDefault();
-      if (user && currentChat) {
-         const payload = {
-            currentChat,
-            message,
-         };
-
-         addMessage(socket, payload);
-         const temp = [...messages, message];
-         setMessages(temp);
+      if (user && chat.thread) {
+         sendMessage(socket, message);
+         dispatch(addMessage(message));
          setMessage(initialMessage);
       }
    };
@@ -69,16 +59,16 @@ const MessageSections = () => {
    const ChatHeader = () => {
       return (
          <div className="sticky top-0 bg-blue-600 px-3 py-2 items-center flex min-h-[8vh]">
-            {currentChat && (
+            {chat.thread && (
                <div className="flex items-center">
                   <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center">
                      <p className=" font-medium text-xl">
-                        {currentChat?.username[0].toUpperCase()}
+                        {chat.thread?.username[0].toUpperCase()}
                      </p>
                   </div>
                   <div className="ml-5">
                      <h2 className="text-white font-medium text-lg m-0 ">
-                        {currentChat?.username}
+                        {chat.thread?.name}
                      </h2>
                      <div className="-mt-1 flex items-center">
                         <div className="h-2 w-2 bg-green-400 rounded-full mt-1"></div>
@@ -94,30 +84,53 @@ const MessageSections = () => {
       );
    };
 
+   const Messages = () => {
+      return (
+         <div ref={setRef}>
+            {chat.messages.map((message, index) => (
+               <div
+                  className={`w-full h-full flex ${
+                     message.senderId === user?.id ? "justify-end" : ""
+                  } `}
+               >
+                  <div
+                     key={index}
+                     className={`${classes.message.default} ${
+                        user?.id !== message.senderId
+                           ? classes.message.self
+                           : classes.message.other
+                     }`}
+                  >
+                     <p>{message.value}</p>
+                  </div>
+               </div>
+            ))}
+         </div>
+      );
+   };
+
+   const EmptyThread = () => {
+      return (
+         <div className="flex item-center justify-center flex-col h-[100%]">
+            <div>
+               <img src="/logo192.png" alt="logo" className="m-auto" />
+            </div>
+            <div className="text-center">
+               <h2 className="text-lg font-medium">
+                  Welcome to XSocket chat app!
+               </h2>
+               <p>Please select any user to start chating.😊</p>
+            </div>
+         </div>
+      );
+   };
+
    return (
       <div className="col-span-3 h-full overflow-y-auto">
          <ChatHeader />
-         <div className="flex flex-col h-[92%]">
-            <div className=" flex-grow flex-1 p-2 overflow-y-auto">
-               {currentChat ? (
-                  <Fragment>
-                     {messages.map((message, index) => (
-                        <p key={index}>{message.value}</p>
-                     ))}
-                  </Fragment>
-               ) : (
-                  <div className="flex item-center justify-center flex-col h-[100%]">
-                     <div>
-                        <img src="/logo192.png" alt="logo" className="m-auto" />
-                     </div>
-                     <div className="text-center">
-                        <h2 className="text-lg font-medium">
-                           Welcome to XSocket chat app!
-                        </h2>
-                        <p>Please select any user to start chating.😊</p>
-                     </div>
-                  </div>
-               )}
+         <div className="flex flex-col h-[92vh]">
+            <div className="flex-grow flex-1 p-2 overflow-y-auto">
+               {chat.thread ? <Messages /> : <EmptyThread />}
             </div>
             <div className="h-[50px] sticky bottom-0 bg-white">
                <form action="" className="flex" onSubmit={handleSubmit}>
@@ -130,7 +143,7 @@ const MessageSections = () => {
                   />
                   <button
                      type="submit"
-                     className=" bg-blue-500 px-10 py-1 text-white rounded-full ml-2"
+                     className=" bg-blue-600 px-10 py-1 text-white rounded-full ml-2"
                   >
                      Send
                   </button>
