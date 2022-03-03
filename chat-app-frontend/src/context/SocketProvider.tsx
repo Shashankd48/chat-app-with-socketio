@@ -29,6 +29,7 @@ export default function SocketProvider({ children }: LayoutsProps) {
       if (user) {
          const newSocket = io(config.server, {
             transports: ["websocket", "polling"],
+            query: { userId: user.id },
          });
          setSocket(newSocket);
          return (): any => newSocket.close();

@@ -7,6 +7,8 @@ import { useAppDispatch } from "src/store";
 import { MessageInterface } from "src/interfaces/message.interface";
 import SocketEvents from "src/config/SocketEvents";
 import { addMessage } from "src/features/chat/chatSlice";
+import ChatHeader from "./ChatHeader";
+import MessageContainer from "./MessageContainer";
 
 const classes = {
    message: {
@@ -66,64 +68,6 @@ const MessageSections = () => {
       }
    };
 
-   const ChatHeader = () => {
-      return (
-         <div className="sticky top-0 bg-blue-600 px-3 py-2 items-center flex min-h-[8vh]">
-            {chat.thread && (
-               <div className="flex items-center">
-                  <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center">
-                     <p className=" font-medium text-xl">
-                        {chat.thread?.username[0].toUpperCase()}
-                     </p>
-                  </div>
-                  <div className="ml-5">
-                     <h2 className="text-white font-medium text-lg m-0 ">
-                        {chat.thread?.name}
-                     </h2>
-                     <div className="-mt-1 flex items-center">
-                        <div className="h-2 w-2 bg-green-400 rounded-full mt-1"></div>
-
-                        <p className="text-gray-200 m-0 p-0 ml-1 text-sm">
-                           online
-                        </p>
-                     </div>
-                  </div>
-               </div>
-            )}
-         </div>
-      );
-   };
-
-   const Messages = () => {
-      return (
-         <div>
-            {chat.messages.map((message, index) => (
-               <div
-                  className={`w-full h-full flex ${
-                     message.senderId === user?.id ? "justify-end" : ""
-                  } `}
-               >
-                  <div
-                     key={index}
-                     className={`${classes.message.default} ${
-                        user?.id !== message.senderId
-                           ? classes.message.self
-                           : classes.message.other
-                     }`}
-                  >
-                     <p>{message.value}</p>
-                  </div>
-               </div>
-            ))}
-            <EndOfMessage />
-         </div>
-      );
-   };
-
-   const EndOfMessage = () => {
-      return <div ref={endOfMessageRef} className="mb-5"></div>;
-   };
-
    const EmptyThread = () => {
       return (
          <div className="flex item-center justify-center flex-col h-[100%]">
@@ -141,11 +85,15 @@ const MessageSections = () => {
    };
 
    return (
-      <div className="col-span-3 h-full" ref={endOfMessageRef}>
+      <div className="col-span-3 h-full">
          <ChatHeader />
          <div className="flex flex-col h-[92vh]">
             <div className="flex-grow flex-1 p-2 overflow-y-auto">
-               {chat.thread ? <Messages /> : <EmptyThread />}
+               {chat.thread ? (
+                  <MessageContainer endOfMessageRef={endOfMessageRef} />
+               ) : (
+                  <EmptyThread />
+               )}
             </div>
 
             <div className="h-[50px] sticky bottom-0 bg-white">

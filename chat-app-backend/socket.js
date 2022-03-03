@@ -5,6 +5,7 @@ var recipient = [];
 function socketEvents(io) {
    io.on("connection", (socket) => {
       console.log("User connected", socket.id);
+      console.log("User ", socket.handshake.query.userId);
       recipient.push(socket.id);
 
       socket.on("disconnect", () => {

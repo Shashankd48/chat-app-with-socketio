@@ -22,17 +22,20 @@ const io = require("socket.io")(server, {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Socket Events
 socket(io);
 
 // Routes import
 const HomeRoutes = require("./routes");
 const UserRoutes = require("./routes/user");
 const AuthRoutes = require("./routes/auth");
+const ChatRoutes = require("./routes/chat");
 
 // Use routes
 app.use("/api/", HomeRoutes);
 app.use("/api/user", UserRoutes);
 app.use("/api/auth", AuthRoutes);
+app.use("/api/chat", ChatRoutes);
 
 app.get("/", (req, res) => {
    return res
