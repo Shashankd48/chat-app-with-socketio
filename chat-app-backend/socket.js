@@ -21,6 +21,8 @@ function socketEvents(io) {
 
       socket.join(rooms);
 
+      console.log("ROOMS :", rooms);
+
       socket.on("disconnect", () => {
          console.log("User disconnected", socket.id);
          recipient = recipient.filter((item) => item !== socket.id);
@@ -31,7 +33,7 @@ function socketEvents(io) {
       socket.on(SocketEvents.sendMessage, (data) => {
          console.log("Data: ", data);
          socket.broadcast
-            .to(data.receiverId)
+            .to(rooms)
             .emit(SocketEvents.receiveMessage, data.message);
          // socket.broadcast
          //    .to(recipient)
