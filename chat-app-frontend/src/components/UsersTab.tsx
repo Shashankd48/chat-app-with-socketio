@@ -6,6 +6,14 @@ import { setCurrentChat } from "src/features/user/currentChatSlice";
 import { UserInterface } from "src/interfaces/user.interface";
 import { RootState } from "src/reducers";
 import { useAppDispatch } from "src/store";
+import UserInfo from "./UserInfo";
+
+const classes = {
+   activeTab: "bg-slate-200",
+   defaultTab: "bg-white",
+   default:
+      "text-lg py-3 flex items-center hover:bg-slate-300 px-1 rounded-md cursor-pointer",
+};
 
 const UsersTab = () => {
    const [usersList, setUsersList] = useState<[UserInterface] | []>([]);
@@ -35,37 +43,9 @@ const UsersTab = () => {
       if (user) _getUsers();
    }, [user]);
 
-   useEffect(() => {
-      console.log(chat);
-   }, [chat]);
-
    const handleOpenChat = (user: UserInterface) => {
       dispatch(setCurrentThread(user));
       dispatch(setCurrentChat(user));
-   };
-
-   const UserInfo = () => {
-      return (
-         <div className=" sticky top-0 bg-white py-5">
-            <div className="border-b border-gray-300">
-               <div className="bg-gray-300 rounded-full h-20 w-20 flex justify-center items-center border border-gray-300 m-auto">
-                  <h2 className="font-medium text-4xl">
-                     {user?.username[0].toUpperCase()}
-                  </h2>
-               </div>
-
-               <div className=" text-center py-2">
-                  <h2 className="font-medium text-lg">{user?.name}</h2>
-                  <p className="text-sm font-mono tracking-wide">
-                     {user?.username}
-                  </p>
-               </div>
-            </div>
-            <div className="pt-3">
-               <h1 className="font-medium text-lg">Users & Group</h1>
-            </div>
-         </div>
-      );
    };
 
    return (
@@ -77,19 +57,26 @@ const UsersTab = () => {
                {usersList.map((user) => (
                   <li
                      key={user.id}
-                     className="text-lg py-2 flex items-center hover:bg-slate-300 px-1
-                      rounded-md cursor-pointer"
+                     className={`${classes.default} ${
+                        chat.thread?.id === user.id
+                           ? classes.activeTab
+                           : classes.defaultTab
+                     } `}
                      onClick={() => {
                         handleOpenChat(user);
                      }}
                   >
                      <div className="bg-gray-300 rounded-full h-11 w-11 flex justify-center items-center border border-gray-300">
-                        <h2 className=" font-medium">
+                        <h2 className="font-medium">
                            {user.username[0].toUpperCase()}
                         </h2>
                      </div>
-                     <div className="pl-3">
-                        <h3 className="text-md font-medium truncate max-w-[200px]">
+                     <div className="pl-2">
+                        <h3
+                           className={`text-md truncate max-w-[200px] ${
+                              chat.thread?.id === user.id && "font-medium"
+                           }`}
+                        >
                            {user.name}
                         </h3>
                         <h3 className="text-sm font-mono text-gray-500">

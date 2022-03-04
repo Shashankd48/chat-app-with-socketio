@@ -17,14 +17,14 @@ const MessageContainer = ({ endOfMessageRef }: any) => {
    const { chat, user } = useSelector((state: RootState) => state);
    return (
       <div>
-         {chat.messages.map((message, index: number) => (
+         {chat.messages.map((message) => (
             <div
                className={`w-full h-full flex ${
                   message.senderId === user?.id ? "justify-end" : ""
                } `}
+               key={message.id}
             >
                <div
-                  key={index}
                   className={`${classes.message.default} ${
                      user?.id !== message.senderId
                         ? classes.message.self

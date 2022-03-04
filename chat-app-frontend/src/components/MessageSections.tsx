@@ -9,22 +9,23 @@ import SocketEvents from "src/config/SocketEvents";
 import { addMessage } from "src/features/chat/chatSlice";
 import ChatHeader from "./ChatHeader";
 import MessageContainer from "./MessageContainer";
+import { v4 as uuidv4 } from "uuid";
 
-const classes = {
-   message: {
-      self: "bg-blue-600 text-white",
-      other: "bg-gray-200 float-right",
-      default: "px-3 py-2 rounded-md my-2 max-w-[75%] inline-block",
-   },
+const getEmptyMessage = (senderId: any, receiverId: string | any) => {
+   return {
+      id: uuidv4(),
+      value: "",
+      senderId,
+      receiverId: "",
+   };
 };
 
 const MessageSections = () => {
    const { user, chat } = useSelector((state: RootState) => state);
-   const initialMessage = {
-      value: "",
-      senderId: user?.id || "",
-   };
-   const [message, setMessage] = useState<MessageInterface>(initialMessage);
+
+   const [message, setMessage] = useState<MessageInterface>(
+      getEmptyMessage(user?.id, chat.thread?.id)
+   );
    const socket = useSocket();
    const dispatch = useAppDispatch();
    const endOfMessageRef = useRef<any>(null);
@@ -61,9 +62,10 @@ const MessageSections = () => {
       if (message.value === "") return;
 
       if (user && chat.thread) {
-         await dispatch(addMessage(message));
-         sendMessage(socket, message);
-         setMessage(initialMessage);
+         const newMessage = { ...message, receiverId: chat.thread?.id };
+         await dispatch(addMessage(newMessage));
+         sendMessage(socket, newMessage);
+         setMessage(getEmptyMessage(user.id, ""));
          scrollMessagesToBottom();
       }
    };
