@@ -13,11 +13,18 @@ const chat = createSlice({
          return state;
       },
       addMessage(state, { payload }: PayloadAction<MessageInterface>) {
+         // console.log("log: add", state.thread);
+         // if (payload.receiverId === state.thread?.id)
          state.messages.push(payload);
+         return state;
+      },
+
+      setUsers(state, { payload }: any) {
+         state.users = payload;
          return state;
       },
    },
 });
 
-export const { setCurrentThread, addMessage } = chat.actions;
+export const { setCurrentThread, addMessage, setUsers } = chat.actions;
 export default chat.reducer;

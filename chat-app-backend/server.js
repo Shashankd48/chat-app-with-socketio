@@ -22,6 +22,15 @@ const io = require("socket.io")(server, {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+io.use((socket, next) => {
+   const userId = socket.handshake.query.userId;
+
+   if (userId) {
+      socket.userId = userId;
+   }
+   next();
+});
+
 // Socket Events
 socket(io);
 

@@ -22,6 +22,8 @@ const getEmptyMessage = (senderId: any, receiverId: string | any) => {
 
 const MessageSections = () => {
    const { user, chat } = useSelector((state: RootState) => state);
+   // const [currentThread, setCurrentThread] = useState("");
+   let currentThread = chat.thread?.id;
 
    const [message, setMessage] = useState<MessageInterface>(
       getEmptyMessage(user?.id, chat.thread?.id)
@@ -48,9 +50,14 @@ const MessageSections = () => {
       if (socket?.connected) {
          console.log("log: Now connected");
          socket.on(SocketEvents.receiveMessage, (data) => {
-            console.log("log: New Message", data);
+            console.log("log: New Message", data.receiverId);
+            console.log("log: chat", chat);
+            console.log("log: currentThread", currentThread);
+
+            // if (data.receiverId == currentThread) {
             dispatch(addMessage(data));
             scrollMessagesToBottom();
+            // }
          });
       } else {
          console.log("log: Not connected yet!");
