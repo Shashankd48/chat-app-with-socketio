@@ -70,6 +70,7 @@ const MessageSections = () => {
 
       if (user && chat.thread) {
          const newMessage = { ...message, receiverId: chat.thread?.id };
+         console.log("log: newMessage", newMessage);
          await dispatch(addMessage(newMessage));
          sendMessage(socket, newMessage);
          setMessage(getEmptyMessage(user.id, ""));

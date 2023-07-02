@@ -4,3 +4,10 @@ export interface MessageInterface {
    senderId: string;
    receiverId: string;
 }
+
+export interface NewMessageInterface {
+   content: string;
+   contentType: string;
+   mimeType: string;
+   conversation: string;
+}

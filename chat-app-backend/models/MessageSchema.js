@@ -2,16 +2,24 @@ const mongoose = require("mongoose");
 
 var MessageSchema = new mongoose.Schema(
    {
-      username: {
+      content: {
          type: String,
          required: true,
       },
-      name: {
-         type: String,
+      contentType: string, // text/media,
+      mimeType: string, // jpg, png, ,
+      conversation: {
+         type: ObjectId,
+         ref: "Contact",
+         required: true,
+      },
+      user: {
+         type: ObjectId,
+         ref: "User",
          required: true,
       },
    },
-   { timestamps: true, collection: "User" }
+   { timestamps: true, collection: "Messages" }
 );
 
-module.exports = mongoose.model("User", MessageSchema);
+module.exports = mongoose.model("Messages", MessageSchema);
