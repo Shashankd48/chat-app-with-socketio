@@ -20,18 +20,18 @@ const MessageContainer = ({ endOfMessageRef }: any) => {
          {chat.messages.map((message) => (
             <div
                className={`w-full h-full flex ${
-                  message.senderId === user?.id ? "justify-end" : ""
+                  message.user === user?.id ? "justify-end" : ""
                } `}
-               key={message.id}
+               key={message._id}
             >
                <div
                   className={`${classes.message.default} ${
-                     user?.id !== message.senderId
+                     user?.id !== message.user
                         ? classes.message.self
                         : classes.message.other
                   }`}
                >
-                  <p>{message.value}</p>
+                  <p>{message.content}</p>
                </div>
             </div>
          ))}

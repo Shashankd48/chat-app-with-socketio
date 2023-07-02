@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 var MessageSchema = new mongoose.Schema(
    {
@@ -6,12 +7,12 @@ var MessageSchema = new mongoose.Schema(
          type: String,
          required: true,
       },
-      contentType: string, // text/media,
-      mimeType: string, // jpg, png, ,
+      contentType: String, // text/media,
+      mimeType: String, // jpg, png, ,
       conversation: {
          type: ObjectId,
          ref: "Contact",
-         required: true,
+         required: false,
       },
       user: {
          type: ObjectId,

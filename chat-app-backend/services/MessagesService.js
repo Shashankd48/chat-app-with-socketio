@@ -3,8 +3,8 @@ const MessageSchema = require("../models/MessageSchema");
 class MessagesService {
    constructor() {}
 
-   async create(user, payload) {
-      const message = new MessageSchema({ user, ...payload });
+   async create(payload) {
+      const message = new MessageSchema(payload);
       return await message.save();
    }
 

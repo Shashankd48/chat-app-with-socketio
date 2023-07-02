@@ -7,6 +7,7 @@ const {
    NotFoundError,
 } = require("../../constants/ResponseConstant");
 const UserService = require("../../services/UserService");
+const { successRes } = require("../../common/interceptors");
 
 exports.createContact = async (req, res) => {
    try {
@@ -45,14 +46,9 @@ exports.getContactByUserId = async (req, res) => {
    try {
       const { userId } = req.params;
 
-      const contact = await ChatService.findContactByUserId(userId);
+      const contacts = await ChatService.findContactByUserId(userId);
 
-      return contact
-         ? res.status(200).json({ ...SuccessResponse, contact })
-         : res.status(404).json({
-              ...NotFoundError,
-              message: "No contact found!",
-           });
+      return successRes(res, contacts);
    } catch (error) {
       console.log(error);
       return res.status(500).json(InternalServerError);

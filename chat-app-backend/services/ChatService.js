@@ -1,5 +1,4 @@
 const ContactSchema = require("../models/ContactSchema");
-const UserSchema = require("../models/UserSchema");
 
 class ChatService {
    constructor() {}

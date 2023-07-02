@@ -10,19 +10,38 @@ import { addMessage } from "src/features/chat/chatSlice";
 import ChatHeader from "./ChatHeader";
 import MessageContainer from "./MessageContainer";
 import { v4 as uuidv4 } from "uuid";
+import { EContentType, EMimeType } from "src/enums";
 
 const getEmptyMessage = (senderId: any, receiverId: string | any) => {
    return {
       id: uuidv4(),
-      value: "",
-      senderId,
-      receiverId: "",
+      content: "",
+      contentType: "",
+      mimeType: "",
+      conversation: "",
+      receiverId,
+      user: senderId,
    };
+};
+
+const EmptyThread = () => {
+   return (
+      <div className="flex item-center justify-center flex-col h-[100%]">
+         <div>
+            <img src="/logo192.png" alt="logo" className="m-auto" />
+         </div>
+         <div className="text-center">
+            <h2 className="text-lg font-medium">
+               Welcome to XSocket chat app!
+            </h2>
+            <p>Please select any user to start chating.😊</p>
+         </div>
+      </div>
+   );
 };
 
 const MessageSections = () => {
    const { user, chat } = useSelector((state: RootState) => state);
-   // const [currentThread, setCurrentThread] = useState("");
    let currentThread = chat.thread?.id;
 
    const [message, setMessage] = useState<MessageInterface>(
@@ -66,32 +85,20 @@ const MessageSections = () => {
 
    const handleSubmit = async (e: any) => {
       e.preventDefault();
-      if (message.value === "") return;
+      if (message.content === "") return;
 
       if (user && chat.thread) {
-         const newMessage = { ...message, receiverId: chat.thread?.id };
+         const newMessage = {
+            ...message,
+            receiverId: chat.thread?.id,
+            user: user.id,
+         };
          console.log("log: newMessage", newMessage);
          await dispatch(addMessage(newMessage));
          sendMessage(socket, newMessage);
          setMessage(getEmptyMessage(user.id, ""));
          scrollMessagesToBottom();
       }
-   };
-
-   const EmptyThread = () => {
-      return (
-         <div className="flex item-center justify-center flex-col h-[100%]">
-            <div>
-               <img src="/logo192.png" alt="logo" className="m-auto" />
-            </div>
-            <div className="text-center">
-               <h2 className="text-lg font-medium">
-                  Welcome to XSocket chat app!
-               </h2>
-               <p>Please select any user to start chating.😊</p>
-            </div>
-         </div>
-      );
    };
 
    return (
@@ -110,9 +117,14 @@ const MessageSections = () => {
                <form action="" className="flex" onSubmit={handleSubmit}>
                   <input
                      className="border border-gray-400 py-2 px-3 w-full rounded-full"
-                     value={message.value}
+                     value={message.content}
                      onChange={(e) =>
-                        setMessage({ ...message, value: e.target.value })
+                        setMessage({
+                           ...message,
+                           content: e.target.value,
+                           contentType: EContentType.TEXT,
+                           mimeType: EMimeType.NONE,
+                        })
                      }
                   />
                   <button

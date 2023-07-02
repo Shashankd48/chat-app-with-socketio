@@ -1,6 +1,7 @@
 const SocketEvents = require("./constants/SocketEvents");
 const { v4: uuidv4 } = require("uuid");
 const ChatService = require("./services/ChatService");
+const MessagesService = require("./services/MessagesService");
 
 var recipient = [];
 
@@ -45,8 +46,11 @@ function socketEvents(io) {
          console.log("log: ", socket.userId);
       });
 
-      socket.on(SocketEvents.sendMessage, (data) => {
+      socket.on(SocketEvents.sendMessage, async (data) => {
          console.log("Data: ", data);
+
+         const message = await MessagesService.create(data.message);
+
          // socket.broadcast
          //    .to(rooms)
          //    .emit(SocketEvents.receiveMessage, data.message);
