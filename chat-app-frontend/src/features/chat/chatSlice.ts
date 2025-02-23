@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { MessageInterface } from "src/interfaces/message.interface";
-import { UserInterface } from "src/interfaces/user.interface";
-import { ChatInterface, InitialChat } from "../../interfaces/chat.interface";
+import { MessageInterface } from "src/libs/interfaces/message.interface";
+import { UserInterface } from "src/libs/interfaces/user.interface";
+import {
+   ChatInterface,
+   InitialChat,
+} from "../../libs/interfaces/chat.interface";
 
 const chat = createSlice({
    name: "chat",

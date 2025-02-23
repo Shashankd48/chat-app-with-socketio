@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { InitialUser, UserInterface } from "src/interfaces/user.interface";
+import { InitialUser, UserInterface } from "src/libs/interfaces/user.interface";
 import { LockClosedIcon } from "@heroicons/react/solid";
-import { login } from "src/actions/accountActions";
-import { useAppDispatch } from "src/store";
+import { login, signup } from "src/libs/actions/accountActions";
+import { useAppDispatch } from "src/libs/store";
 import { userLogin } from "src/features/user/userSlice";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "src/reducers";
+import { RootState } from "src/libs/reducers";
+import toast from "react-hot-toast";
 
-const Accounts = () => {
+const AuthPage = () => {
    const [account, setAccount] = useState<UserInterface>(InitialUser);
    const [isLogin, setIsLogin] = useState(true);
    const dispatch = useAppDispatch();
@@ -23,22 +24,23 @@ const Accounts = () => {
    const handleSubmit = async (e: any) => {
       e.preventDefault();
       try {
-         if (isLogin) {
-            const data = await login(account.username);
-            if (!data || data?.error) return;
+         let res;
+         if (isLogin) res = await login(account.username);
+         else res = await signup(account.username, account.name);
 
-            dispatch(
-               userLogin({
-                  id: data.user._id,
-                  name: data.user.name,
-                  username: data.user.username,
-               })
-            );
-         } else {
-            //
-         }
-      } catch (error) {
+         console.log("log: ", res);
+         if (!res || res?.error) throw new Error(res.message);
+
+         dispatch(
+            userLogin({
+               id: res.user._id,
+               name: res.user.name,
+               username: res.user.username,
+            })
+         );
+      } catch (error: any) {
          console.log(error);
+         toast.error(error.message);
       }
    };
 
@@ -120,13 +122,9 @@ const Accounts = () => {
             <div className="border rounded-md p-5 w-[100%] bg-white min-h-[400px] shadow-md">
                <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                   <div className="max-w-md w-full space-y-8">
-                     <div>
-                        <img
-                           className="mx-auto h-12 w-auto"
-                           src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                           alt="Workflow"
-                        />
-                        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                     <div className="flex gap-x-2 items-center">
+                        <LockClosedIcon width={40} height={40} />
+                        <h2 className="text-center text-3xl font-extrabold text-gray-900">
                            {isLogin
                               ? "Sign in to your account"
                               : "Create new account"}
@@ -141,4 +139,4 @@ const Accounts = () => {
    );
 };
 
-export default Accounts;
+export default AuthPage;

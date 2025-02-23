@@ -1,13 +1,13 @@
 import Chat from "src/components/Chat";
 import { useSelector } from "react-redux";
-import { RootState } from "src/reducers";
+import { RootState } from "src/libs/reducers";
 
 import { Navigate } from "react-router-dom";
 
-const Home = () => {
+const ChatPage = () => {
    const user = useSelector((state: RootState) => state.user);
 
-   if (!user) return <Navigate to="/accounts/login" />;
+   if (!user) return <Navigate to="/login" />;
 
    return (
       <div className="h-screen bg-gray-200">
@@ -16,4 +16,4 @@ const Home = () => {
    );
 };
 
-export default Home;
+export default ChatPage;

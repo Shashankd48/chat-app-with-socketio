@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { RootState } from "src/reducers";
+import { RootState } from "src/libs/reducers";
 
 const UserInfo = () => {
    const user = useSelector((state: RootState) => state.user);

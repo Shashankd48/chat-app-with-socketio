@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { useAppDispatch } from "src/store";
+import { useAppDispatch } from "src/libs/store";
 import { setUser } from "src/features/user/userSlice";
-import { useSocket } from "src/context/SocketProvider";
-import SocketEvents from "src/config/SocketEvents";
+import { useSocket } from "src/libs/context/SocketProvider";
+import SocketEvents from "src/libs/config/SocketEvents";
 import { setUsers } from "src/features/chat/chatSlice";
 
 const Layouts = ({ children }: { children: React.ReactNode }) => {

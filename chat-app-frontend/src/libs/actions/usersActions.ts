@@ -1,5 +1,5 @@
-import Axios from "src/config/Axios";
-import UserServices from "src/services/UserServices";
+import Axios from "src/libs/config/Axios";
+import UserServices from "src/libs/services/UserServices";
 
 export function getUsers() {
    let request = Axios.get(UserServices.user);

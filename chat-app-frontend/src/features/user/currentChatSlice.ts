@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserInterface } from "../../interfaces/user.interface";
+import { UserInterface } from "../../libs/interfaces/user.interface";
 
 const currentChat = createSlice({
    name: "currentChat",

@@ -1,28 +1,31 @@
-import "./App.css";
-import Home from "./views/Home";
-import Accounts from "./views/Accounts";
+import ChatPage from "./views/ChatPage";
+import AuthPage from "./views/AuthPage";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./store";
+import store from "./libs/store";
 import Layouts from "./Layouts";
-import SocketProvider from "./context/SocketProvider";
+import SocketProvider from "./libs/context/SocketProvider";
+import { Toaster } from "react-hot-toast";
+import NotFoundPage from "./views/NotFoundPage";
 
 function App() {
    return (
-      <div className="App">
+      <>
          <Provider store={store}>
             <SocketProvider>
                <Layouts>
                   <BrowserRouter>
                      <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="accounts/login" element={<Accounts />} />
+                        <Route path="/" element={<ChatPage />} />
+                        <Route path="/login" element={<AuthPage />} />
+                        <Route path="/*" element={<NotFoundPage />} />
                      </Routes>
                   </BrowserRouter>
                </Layouts>
             </SocketProvider>
          </Provider>
-      </div>
+         <Toaster position="top-center" reverseOrder={false} />
+      </>
    );
 }
 

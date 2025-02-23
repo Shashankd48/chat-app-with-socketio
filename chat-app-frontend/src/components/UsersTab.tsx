@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getUsers } from "src/actions/usersActions";
+import { getUsers } from "src/libs/actions/usersActions";
 import { setCurrentThread } from "src/features/chat/chatSlice";
 import { setCurrentChat } from "src/features/user/currentChatSlice";
-import { UserInterface } from "src/interfaces/user.interface";
-import { RootState } from "src/reducers";
-import { useAppDispatch } from "src/store";
+import { UserInterface } from "src/libs/interfaces/user.interface";
+import { RootState } from "src/libs/reducers";
+import { useAppDispatch } from "src/libs/store";
 import UserInfo from "./UserInfo";
 
 const classes = {

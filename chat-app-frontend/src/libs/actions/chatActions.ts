@@ -1,5 +1,5 @@
-import SocketEvents from "src/config/SocketEvents";
-import Axios from "src/config/Axios";
+import SocketEvents from "src/libs/config/SocketEvents";
+import Axios from "src/libs/config/Axios";
 import { Socket } from "socket.io-client";
 
 // Get Contacts list from user's address book

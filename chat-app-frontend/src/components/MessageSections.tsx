@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
-import { sendMessage, getThreads } from "src/actions/chatActions";
-import { useSocket } from "src/context/SocketProvider";
-import { RootState } from "src/reducers";
-import { useAppDispatch } from "src/store";
-import { MessageInterface } from "src/interfaces/message.interface";
-import SocketEvents from "src/config/SocketEvents";
+import { sendMessage, getThreads } from "src/libs/actions/chatActions";
+import { useSocket } from "src/libs/context/SocketProvider";
+import { RootState } from "src/libs/reducers";
+import { useAppDispatch } from "src/libs/store";
+import { MessageInterface } from "src/libs/interfaces/message.interface";
+import SocketEvents from "src/libs/config/SocketEvents";
 import { addMessage } from "src/features/chat/chatSlice";
 import ChatHeader from "./ChatHeader";
 import MessageContainer from "./MessageContainer";
@@ -31,6 +31,8 @@ const MessageSections = () => {
    const socket = useSocket();
    const dispatch = useAppDispatch();
    const endOfMessageRef = useRef<any>(null);
+
+   console.log("log: chat", chat);
 
    useEffect(() => {
       return listenMessage();

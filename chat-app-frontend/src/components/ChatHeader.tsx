@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { RootState } from "src/reducers";
+import { RootState } from "src/libs/reducers";
 
 export default function ChatHeader() {
    const chat = useSelector((state: RootState) => state.chat);
